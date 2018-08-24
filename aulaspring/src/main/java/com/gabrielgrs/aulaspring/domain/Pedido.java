@@ -3,7 +3,9 @@ package com.gabrielgrs.aulaspring.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -25,6 +27,8 @@ public class Pedido implements Serializable {
     @JoinColumn(name = "endereco_de_entrega_id")
     private Endereco enderecoDeEntrega;
 
+    private Set<ItemPedido> itens;
+
     public Pedido() {
     }
 
@@ -32,6 +36,7 @@ public class Pedido implements Serializable {
         this.instante = instante;
         this.cliente = cliente;
         this.enderecoDeEntrega = enderecoDeEntrega;
+        this.itens = new HashSet<>();
     }
 
     public Integer getId() {
@@ -74,6 +79,14 @@ public class Pedido implements Serializable {
         this.enderecoDeEntrega = enderecoDeEntrega;
     }
 
+    public Set<ItemPedido> getItens() {
+        return itens;
+    }
+
+    public void setItens(Set<ItemPedido> itens) {
+        this.itens = itens;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -87,4 +100,6 @@ public class Pedido implements Serializable {
 
         return Objects.hash(id);
     }
+
+
 }
