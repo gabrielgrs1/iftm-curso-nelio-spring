@@ -1,13 +1,8 @@
 package com.gabrielgrs.aulaspring;
 
-import com.gabrielgrs.aulaspring.domain.Categoria;
-import com.gabrielgrs.aulaspring.domain.Cidade;
-import com.gabrielgrs.aulaspring.domain.Estado;
-import com.gabrielgrs.aulaspring.domain.Produto;
-import com.gabrielgrs.aulaspring.repositories.CategoriaRepository;
-import com.gabrielgrs.aulaspring.repositories.CidadeRepository;
-import com.gabrielgrs.aulaspring.repositories.EstadoRepository;
-import com.gabrielgrs.aulaspring.repositories.ProdutoRepository;
+import com.gabrielgrs.aulaspring.domain.*;
+import com.gabrielgrs.aulaspring.domain.enuns.TipoCliente;
+import com.gabrielgrs.aulaspring.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,13 +18,17 @@ public class AulaspringApplication implements CommandLineRunner {
     private final ProdutoRepository produtoRepository;
     private final CidadeRepository cidadeRepository;
     private final EstadoRepository estadoRepository;
+    private final ClienteRepository clienteRepository;
+    private final EnderecoRepository enderecoRepository;
 
     @Autowired
-    public AulaspringApplication(CategoriaRepository categoriaRepository, ProdutoRepository produtoRepository, CidadeRepository cidadeRepository, EstadoRepository estadoRepository) {
+    public AulaspringApplication(CategoriaRepository categoriaRepository, ProdutoRepository produtoRepository, CidadeRepository cidadeRepository, EstadoRepository estadoRepository, ClienteRepository clienteRepository, EnderecoRepository enderecoRepository) {
         this.categoriaRepository = categoriaRepository;
         this.produtoRepository = produtoRepository;
         this.cidadeRepository = cidadeRepository;
         this.estadoRepository = estadoRepository;
+        this.clienteRepository = clienteRepository;
+        this.enderecoRepository = enderecoRepository;
     }
 
 
@@ -38,14 +37,14 @@ public class AulaspringApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
-        Categoria cat1 = new Categoria(null, "Informática");
-        Categoria cat2 = new Categoria(null, "Escritório");
+        Categoria cat1 = new Categoria("Informática");
+        Categoria cat2 = new Categoria("Escritório");
 
-        Produto p1 = new Produto(null, "Computador", 2000.0);
-        Produto p2 = new Produto(null, "Impressora", 800.0);
-        Produto p3 = new Produto(null, "Mouse", 80.0);
+        Produto p1 = new Produto("Computador", 2000.0);
+        Produto p2 = new Produto("Impressora", 800.0);
+        Produto p3 = new Produto("Mouse", 80.0);
 
         cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
         cat2.getProdutos().addAll(Collections.singletonList(p2));
@@ -57,12 +56,12 @@ public class AulaspringApplication implements CommandLineRunner {
         categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
         produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
 
-        Estado est1 = new Estado(null, "Minas Gerais");
-        Estado est2 = new Estado(null, "Sao Paulo");
+        Estado est1 = new Estado("Minas Gerais");
+        Estado est2 = new Estado("Sao Paulo");
 
-        Cidade c1 = new Cidade(null, "Uberlandia", est1);
-        Cidade c2 = new Cidade(null, "Sao Paulo", est2);
-        Cidade c3 = new Cidade(null, "Campinas", est2);
+        Cidade c1 = new Cidade("Uberlandia", est1);
+        Cidade c2 = new Cidade("Sao Paulo", est2);
+        Cidade c3 = new Cidade("Campinas", est2);
 
         est1.getCidades().addAll(Collections.singletonList(c1));
         est1.getCidades().addAll(Arrays.asList(c1, c2, c3));
@@ -70,5 +69,16 @@ public class AulaspringApplication implements CommandLineRunner {
         estadoRepository.saveAll(Arrays.asList(est1, est2));
         cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 
+        Cliente cli1 = new Cliente("Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+
+        cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
+
+        Endereco e1 = new Endereco("Rua Flores", "300", "Apto 303", "Jardim", "3220834", cli1, c1);
+        Endereco e2 = new Endereco("Avenida Matos", "105", "Sala 800", "Centro", "38777012", cli1, c2);
+
+        cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+
+        clienteRepository.saveAll(Collections.singletonList(cli1));
+        enderecoRepository.saveAll(Arrays.asList(e1, e2));
     }
 }
