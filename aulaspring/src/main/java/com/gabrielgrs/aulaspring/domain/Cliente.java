@@ -1,5 +1,6 @@
 package com.gabrielgrs.aulaspring.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gabrielgrs.aulaspring.domain.enuns.TipoCliente;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class Cliente implements Serializable {
     private String cpfOuCnpj;
     private Integer tipo;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "cliente")
     private List<Endereco> enderecos;
 
