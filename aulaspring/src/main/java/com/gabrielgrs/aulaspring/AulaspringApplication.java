@@ -1,6 +1,7 @@
 package com.gabrielgrs.aulaspring;
 
 import com.gabrielgrs.aulaspring.domain.*;
+import com.gabrielgrs.aulaspring.domain.enuns.EstadoPagamento;
 import com.gabrielgrs.aulaspring.domain.enuns.TipoCliente;
 import com.gabrielgrs.aulaspring.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -20,15 +23,20 @@ public class AulaspringApplication implements CommandLineRunner {
     private final EstadoRepository estadoRepository;
     private final ClienteRepository clienteRepository;
     private final EnderecoRepository enderecoRepository;
+    private final PedidoRepository pedidoRepository;
+    private final PagamentoRepository pagamentoRepository;
+
 
     @Autowired
-    public AulaspringApplication(CategoriaRepository categoriaRepository, ProdutoRepository produtoRepository, CidadeRepository cidadeRepository, EstadoRepository estadoRepository, ClienteRepository clienteRepository, EnderecoRepository enderecoRepository) {
+    public AulaspringApplication(CategoriaRepository categoriaRepository, ProdutoRepository produtoRepository, CidadeRepository cidadeRepository, EstadoRepository estadoRepository, ClienteRepository clienteRepository, EnderecoRepository enderecoRepository, PedidoRepository pedidoRepository, PagamentoRepository pagamentoRepository) {
         this.categoriaRepository = categoriaRepository;
         this.produtoRepository = produtoRepository;
         this.cidadeRepository = cidadeRepository;
         this.estadoRepository = estadoRepository;
         this.clienteRepository = clienteRepository;
         this.enderecoRepository = enderecoRepository;
+        this.pedidoRepository = pedidoRepository;
+        this.pagamentoRepository = pagamentoRepository;
     }
 
 
@@ -37,7 +45,7 @@ public class AulaspringApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws ParseException {
 
         Categoria cat1 = new Categoria("Informática");
         Categoria cat2 = new Categoria("Escritório");
@@ -80,5 +88,21 @@ public class AulaspringApplication implements CommandLineRunner {
 
         clienteRepository.saveAll(Collections.singletonList(cli1));
         enderecoRepository.saveAll(Arrays.asList(e1, e2));
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyy HH:mm");
+        Pedido ped1 = new Pedido(simpleDateFormat.parse("30/09/2017 10:32"), cli1, e1);
+        Pedido ped2 = new Pedido(simpleDateFormat.parse("10/10/2017 19:35"), cli1, e2);
+
+        Pagamento pagto1 = new PagamentoComCartao(EstadoPagamento.QUITADO, ped1, 6);
+        ped1.setPagamento(pagto1);
+
+        Pagamento pagto2 = new PagamentoComBoleto(EstadoPagamento.PENDENTE, ped2, simpleDateFormat.parse("20/10/2017 00:00"), null);
+        ped2.setPagamento(pagto2);
+
+        cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+
+        pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+        pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+
     }
 }
