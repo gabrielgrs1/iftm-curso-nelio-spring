@@ -24,6 +24,7 @@ public class Produto implements Serializable {
     )
     private List<Categoria> categorias;
 
+    @OneToMany(mappedBy = "id.produto")
     private Set<ItemPedido> itens;
 
 

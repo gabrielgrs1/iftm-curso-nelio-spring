@@ -22,6 +22,9 @@ public class ItemPedidoPK implements Serializable {
         this.produto = produto;
     }
 
+    public ItemPedidoPK() {
+    }
+
     public Pedido getPedido() {
         return pedido;
     }
