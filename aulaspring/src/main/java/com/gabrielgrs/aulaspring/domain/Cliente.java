@@ -1,5 +1,6 @@
 package com.gabrielgrs.aulaspring.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gabrielgrs.aulaspring.domain.enuns.TipoCliente;
 
@@ -26,6 +27,7 @@ public class Cliente implements Serializable {
     @CollectionTable(name = "TELEFONE")
     private Set<String> telefones;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos;
 
