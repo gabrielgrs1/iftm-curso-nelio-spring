@@ -1,8 +1,6 @@
 package com.gabrielgrs.aulaspring.services;
 
-import com.gabrielgrs.aulaspring.domain.Categoria;
 import com.gabrielgrs.aulaspring.domain.Cliente;
-import com.gabrielgrs.aulaspring.repositories.CategoriaRepository;
 import com.gabrielgrs.aulaspring.repositories.ClienteRepository;
 import com.gabrielgrs.aulaspring.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,7 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    public Cliente buscar(Integer id) {
+    public Cliente find(Integer id) {
         Optional<Cliente> cliente = clienteRepository.findById(id);
 
         return cliente.orElseThrow(() -> new ObjectNotFoundException("Objeto nao encontrado! Id: " + id
