@@ -2,8 +2,10 @@ package com.gabrielgrs.aulaspring.services;
 
 import com.gabrielgrs.aulaspring.domain.Categoria;
 import com.gabrielgrs.aulaspring.repositories.CategoriaRepository;
+import com.gabrielgrs.aulaspring.services.exceptions.DataIntegrityException;
 import com.gabrielgrs.aulaspring.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -29,5 +31,14 @@ public class CategoriaService {
     public Categoria update(Categoria categoria) {
         find(categoria.getId());
         return categoriaRepository.save(categoria);
+    }
+
+    public void delete(Integer id) {
+        find(id);
+        try {
+            categoriaRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException("Não é possivel excluir uma categoria que possui produtos!");
+        }
     }
 }
