@@ -1,9 +1,7 @@
 package com.gabrielgrs.aulaspring.resources;
 
 
-import com.gabrielgrs.aulaspring.domain.Categoria;
 import com.gabrielgrs.aulaspring.domain.Cliente;
-import com.gabrielgrs.aulaspring.services.CategoriaService;
 import com.gabrielgrs.aulaspring.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
