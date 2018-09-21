@@ -1,4 +1,4 @@
-package com.gabrielgrs.aulaspring.resources.handler;
+package com.gabrielgrs.aulaspring.resources.exception;
 
 import java.io.Serializable;
 
