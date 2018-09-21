@@ -1,6 +1,7 @@
 package com.gabrielgrs.aulaspring.services;
 
 import com.gabrielgrs.aulaspring.domain.Categoria;
+import com.gabrielgrs.aulaspring.dto.CategoriaDTO;
 import com.gabrielgrs.aulaspring.repositories.CategoriaRepository;
 import com.gabrielgrs.aulaspring.services.exceptions.DataIntegrityException;
 import com.gabrielgrs.aulaspring.services.exceptions.ObjectNotFoundException;
@@ -53,6 +54,10 @@ public class CategoriaService {
     public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         return categoriaRepository.findAll(pageRequest);
+    }
+
+    public Categoria fromDTO(CategoriaDTO categoriaDTO) {
+        return new Categoria(categoriaDTO.getNome());
     }
 
 }
