@@ -5,13 +5,16 @@ import com.gabrielgrs.aulaspring.domain.Categoria;
 import com.gabrielgrs.aulaspring.domain.Cliente;
 import com.gabrielgrs.aulaspring.dto.CategoriaDTO;
 import com.gabrielgrs.aulaspring.dto.ClienteDTO;
+import com.gabrielgrs.aulaspring.dto.ClienteNewDTO;
 import com.gabrielgrs.aulaspring.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +46,20 @@ public class ClienteResource {
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         clienteService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO clienteDTO) {
+        Cliente cliente = clienteService.fromDTO(clienteDTO);
+        cliente = clienteService.insert(cliente);
+
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(cliente.getId())
+                .toUri();
+
+        return ResponseEntity.created(uri).build();
     }
 
     @RequestMapping(method = RequestMethod.GET)

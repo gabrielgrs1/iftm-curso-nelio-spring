@@ -1,9 +1,14 @@
 package com.gabrielgrs.aulaspring.services;
 
+import com.gabrielgrs.aulaspring.domain.Cidade;
 import com.gabrielgrs.aulaspring.domain.Cliente;
-import com.gabrielgrs.aulaspring.domain.Cliente;
+import com.gabrielgrs.aulaspring.domain.Endereco;
+import com.gabrielgrs.aulaspring.domain.enuns.TipoCliente;
 import com.gabrielgrs.aulaspring.dto.ClienteDTO;
+import com.gabrielgrs.aulaspring.dto.ClienteNewDTO;
+import com.gabrielgrs.aulaspring.repositories.CidadeRepository;
 import com.gabrielgrs.aulaspring.repositories.ClienteRepository;
+import com.gabrielgrs.aulaspring.repositories.EnderecoRepository;
 import com.gabrielgrs.aulaspring.services.exceptions.DataIntegrityException;
 import com.gabrielgrs.aulaspring.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +27,26 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private CidadeRepository cidadeRepository;
+
+    @Autowired
+    private EnderecoRepository enderecoRepository;
+
     public Cliente find(Integer id) {
         Optional<Cliente> cliente = clienteRepository.findById(id);
 
         return cliente.orElseThrow(() -> new ObjectNotFoundException("Objeto nao encontrado! Id: " + id
                 + ", Tipo: " + Cliente.class.getName()));
+    }
+
+    public Cliente insert(Cliente cliente) {
+        cliente.setId(null);
+        cliente = clienteRepository.save(cliente);
+        enderecoRepository.saveAll(cliente.getEnderecos());
+
+
+        return cliente;
     }
 
     public Cliente update(Cliente cliente) {
@@ -60,5 +80,24 @@ public class ClienteService {
 
     public Cliente fromDTO(ClienteDTO clienteDTO) {
         return new Cliente(clienteDTO.getId(), clienteDTO.getNome(), clienteDTO.getEmail(), null, null);
+    }
+
+    public Cliente fromDTO(ClienteNewDTO clienteDTO) {
+        Cliente cliente = new Cliente(clienteDTO.getNome(), clienteDTO.getEmail(), clienteDTO.getCpfOuCnpj(), TipoCliente.toEnum(clienteDTO.getTipo()));
+        Cidade cidade = cidadeRepository.findById(clienteDTO.getCidadeId()).get();
+        Endereco endereco = new Endereco(clienteDTO.getLogradouro(), clienteDTO.getNumero(), clienteDTO.getComplemento(), clienteDTO.getBairro(), clienteDTO.getCep(), cliente, cidade);
+        cliente.getEnderecos().add(endereco);
+        cliente.getTelefones().add(clienteDTO.getTelefone1());
+        if (clienteDTO.getTelefone2() != null )  {
+            cliente.getTelefones().add(clienteDTO.getTelefone2());
+
+        }
+
+        if (clienteDTO.getTelefone3() != null )  {
+            cliente.getTelefones().add(clienteDTO.getTelefone3());
+
+        }
+        return cliente;
+
     }
 }
