@@ -59,16 +59,37 @@ public class AulaspringApplication implements CommandLineRunner {
         Produto p1 = new Produto("Computador", 2000.0);
         Produto p2 = new Produto("Impressora", 800.0);
         Produto p3 = new Produto("Mouse", 80.0);
+        Produto p4 = new Produto("Mesa de escritório", 80.0);
+        Produto p5 = new Produto("Toalha", 80.0);
+        Produto p6 = new Produto("Colcha", 80.0);
+        Produto p7 = new Produto("TV true color", 80.0);
+        Produto p8 = new Produto("Roçadeira", 80.0);
+        Produto p9 = new Produto("Abajour", 80.0);
+        Produto p10 = new Produto("Pendente", 80.0);
+        Produto p11 = new Produto("Shampoo", 80.0);
 
         cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
-        cat2.getProdutos().addAll(Collections.singletonList(p2));
+        cat2.getProdutos().addAll(Arrays.asList(p2, p4));
+        cat3.getProdutos().addAll(Arrays.asList(p5, p6));
+        cat4.getProdutos().addAll(Arrays.asList(p1, p2, p3, p7));
+        cat5.getProdutos().addAll(Collections.singletonList(p8));
+        cat6.getProdutos().addAll(Arrays.asList(p9, p10));
+        cat7.getProdutos().addAll(Collections.singletonList(p11));
 
-        p1.getCategorias().addAll(Collections.singletonList(cat1));
-        p2.getCategorias().addAll(Arrays.asList(cat1, cat2));
-        p3.getCategorias().addAll(Collections.singletonList(cat1));
+        p1.getCategorias().addAll(Arrays.asList(cat1, cat4));
+        p2.getCategorias().addAll(Arrays.asList(cat1, cat2, cat4));
+        p3.getCategorias().addAll(Arrays.asList(cat1, cat4));
+        p4.getCategorias().addAll(Collections.singletonList(cat2));
+        p5.getCategorias().addAll(Collections.singletonList(cat3));
+        p6.getCategorias().addAll(Collections.singletonList(cat3));
+        p7.getCategorias().addAll(Collections.singletonList(cat4));
+        p8.getCategorias().addAll(Collections.singletonList(cat5));
+        p9.getCategorias().addAll(Collections.singletonList(cat6));
+        p10.getCategorias().addAll(Collections.singletonList(cat6));
+        p11.getCategorias().addAll(Collections.singletonList(cat7));
 
         categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
-        produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
+        produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11));
 
         Estado est1 = new Estado("Minas Gerais");
         Estado est2 = new Estado("Sao Paulo");
