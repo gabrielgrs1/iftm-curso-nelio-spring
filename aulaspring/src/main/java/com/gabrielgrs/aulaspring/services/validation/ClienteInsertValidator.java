@@ -1,9 +1,12 @@
 package com.gabrielgrs.aulaspring.services.validation;
 
+import com.gabrielgrs.aulaspring.domain.Cliente;
 import com.gabrielgrs.aulaspring.domain.enuns.TipoCliente;
 import com.gabrielgrs.aulaspring.dto.ClienteNewDTO;
+import com.gabrielgrs.aulaspring.repositories.ClienteRepository;
 import com.gabrielgrs.aulaspring.resources.exception.FieldMessage;
 import com.gabrielgrs.aulaspring.services.validation.utils.BR;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -11,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert, ClienteNewDTO> {
+
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     @Override
     public void initialize(ClienteInsert constraintAnnotation) {
@@ -31,6 +37,11 @@ public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert
 
         if (clienteNewDTO.getTipo().equals(TipoCliente.PESSOAJURIDICA.getCod()) && !BR.isValidCnpj(clienteNewDTO.getCpfOuCnpj())) {
             fieldMessageList.add(new FieldMessage("cpfOuCnpj", "CNPJ inválido"));
+        }
+
+        Cliente aux = clienteRepository.findByEmail(clienteNewDTO.getEmail());
+        if (aux != null) {
+            fieldMessageList.add(new FieldMessage("email", "Email já existente"));
         }
 
         for (FieldMessage fieldMessage :
