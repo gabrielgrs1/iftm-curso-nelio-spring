@@ -35,6 +35,7 @@ public class Pedido implements Serializable {
     private Set<ItemPedido> itens;
 
     public Pedido() {
+        this.itens = new HashSet<>();
     }
 
     public Pedido(Date instante, Cliente cliente, Endereco enderecoDeEntrega) {
